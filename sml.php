@@ -39,6 +39,7 @@ if ($handle = opendir($pathname)) {
   </head>
   <body>
     <h1>Zählerstand: <?php echo number_format($sml_parser->total_power_consumption_value, 2, ',', '.'); ?> kWh</h1>
-    <h1>Aktuelle Leistung: <?php echo number_format($sml_parser->current_power_value, 2, ',', ' '); ?> W</h1>
+    <h2>Aktuelle Leistung: <?php echo number_format($sml_parser->current_power_value, 2, ',', ' '); ?> W</h2>
+    <h5>Last update: <?php echo $sml_parser->last_update ?></h5>
   </body>
 </html>

@@ -4,6 +4,7 @@ class SML_PARSER {
     public $data;
     public $total_power_consumption_value;
     public $current_power_value;
+    public $last_update;
 
     /**
      * Parse sml file 
@@ -18,6 +19,10 @@ class SML_PARSER {
      */
     private function hexToStr($hexfile) {
         $string = '';
+
+        if (file_exists($hexfile)) {
+            $this->last_update = date ("d.m.Y H:i:s", filemtime($hexfile));
+        }
 
         $fn = fopen($hexfile,"r");
         while(! feof($fn))  {
@@ -77,7 +82,7 @@ class SML_PARSER {
         //Aktuelle Leistung
         $power_string_arr = explode($after_current_power, $arr[1]);
         $current_power_hex = substr($power_string_arr[0], -6);
-        $this->current_power_value = (hexdec($current_power_hex))/100;
+        $this->current_power_value = (hexdec($current_power_hex))/10000;
 
         /**
         print_r("Zählerstand: " . $this->total_power_consumption_value . " kWh");
