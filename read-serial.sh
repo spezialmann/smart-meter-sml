@@ -13,4 +13,4 @@ sleep 10
 kill -TERM $!
 
 ### Script zum Auswerten des SML-Datenstroms aufrufen
-php /var/www/html/sml.php
+php /home/pi/smart-home/sml.php type=DWS7420 smartMeterId=id-smart.meter url=https://localhost/api/v1/smartmeter/data token=1234567890 path=/smart-home/data/
