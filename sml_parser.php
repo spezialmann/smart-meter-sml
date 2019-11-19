@@ -83,14 +83,6 @@ class SML_PARSER {
         $power_string_arr = explode($after_current_power, $arr[1]);
         $current_power_hex = substr($power_string_arr[0], -6);
         $this->current_power_value = (hexdec($current_power_hex))/10000;
-
-        /**
-        print_r("Zählerstand: " . $this->total_power_consumption_value . " kWh");
-        print_r("\n");
-        print_r("Aktuelle Leistung: " . $this->current_power_value . " Watt");
-        print_r("\n");
-        exit();
-        */
     }
 
 }

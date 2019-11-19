@@ -1,26 +1,34 @@
 <?php
 
-$send_object = new SEND_DATA();
-$send_object->postData();
-
 class SEND_DATA {
-    public $total_power_consumption_value = 5487.458;
-    public $current_power_value = 589.75;
-    public $last_update = "14.11.2019 14:55:11";
+    public $token = "";
+    public $type = "DWS7420";
+    public $smartMeterId = "id-power-meter";
+    public $total_power_consumption_value = 0.001;
+    public $current_power_value = 0.01;
+    public $url = "http://localhost:8080/api/v1/measurement/data";
+
+    public function useParams($params=array()) {
+        if(isset($params['token'])) { $this->token = $params['token']; }; 
+        if(isset($params['type'])) { $this->type = $params['type']; }; 
+        if(isset($params['smartMeterId'])) { $this->smartMeterId = $params['smartMeterId']; }; 
+        if(isset($params['url'])) { $this->url = $params['url']; }; 
+    }
 
     public function postData() {
         $data = array(
-            'token' => "DSJICX3KD98DGFLMY3K5",
+            'token' => $this->token,
+            'type' => $this->type,
+            'smartMeterId' => $this->smartMeterId,
             'powerConsumptionCount' => $this->total_power_consumption_value,
             'currentPowerValue' => $this->current_power_value,
-            'dateTime' => $this->last_update,
+            'lastUpdate' => date("d.m.Y H:i:s"),
         );
         
         $payload = json_encode($data);
 
-        
         // Prepare new cURL resource
-        $ch = curl_init('http://localhost:8080/api/v1/measurement/data');
+        $ch = curl_init($this->url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLINFO_HEADER_OUT, true);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -31,12 +39,9 @@ class SEND_DATA {
             'Content-Type: application/json',
             'Content-Length: ' . strlen($payload))
         );
-        
+
         // Submit the POST request
         $result = curl_exec($ch);
-        
-        print_r($result);
-       // exit();
 
         // Close cURL session handle
         curl_close($ch);

@@ -1,7 +1,19 @@
 <?php
 require_once 'sml_parser.php';
+require_once 'send_data.php';
 
-$pathname='data/';
+/** Parameter Parsen */
+$params = array();
+foreach ($argv as $arg) {
+  $e=explode("=",$arg);
+  if(count($e)==2) {
+      $params[$e[0]]=$e[1];
+  }
+  else {   
+      $params[]=$e[0];
+  }
+}
+$pathname = (isset($params['path'])) ? $params['path'] : 'data/';
 
 if ($handle = opendir($pathname)) {
     while (false !== ($file = readdir($handle))) {
@@ -14,15 +26,38 @@ if ($handle = opendir($pathname)) {
         rsort($files);
 
         foreach($files as $file) {
-            if(substr($file,0,9)=='serialin_') {
-                $sml_parser = new SML_PARSER();
-                $sml_parser->parse_sml_file($pathname.$file);
+          if(substr($file,0,9)=='serialin_') {
+            $sml_parser = new SML_PARSER();
+            $sml_parser->parse_sml_file($pathname.$file);
+          }
+          break; 
+        }
+
+        //Nur die letzten 10 Files aufheben
+        $i = 0;
+        foreach($files as $file) {          
+          $i++;
+          if($i>10) {
+            if(is_file($file)) {
+              unlink($file);
             }
-        break; 
+          }
         }
     }
     closedir($handle);
 }
+
+//Daten senden
+if(!empty($sml_parser->total_power_consumption_value)) {
+  $send_data = new SEND_DATA();
+  //$send_data->url = "http://localhost:8080/api/v1/smartmeter/data";
+
+  $send_data->useParams($params);
+  $send_data->total_power_consumption_value = $sml_parser->total_power_consumption_value;
+  $send_data->current_power_value = $sml_parser->current_power_value;
+  $send_data->postData();
+}
+
 ?>
 
 <!doctype html>
