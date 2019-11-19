@@ -15,6 +15,7 @@ foreach ($argv as $arg) {
 }
 $pathname = (isset($params['path'])) ? $params['path'] : 'data/';
 
+/** Datenfiles einlesen */
 if ($handle = opendir($pathname)) {
     while (false !== ($file = readdir($handle))) {
         if ($file != "." && $file != "..") {
@@ -38,8 +39,8 @@ if ($handle = opendir($pathname)) {
         foreach($files as $file) {          
           $i++;
           if($i>10) {
-            if(is_file($file)) {
-              unlink($file);
+            if(is_file($pathname.$file)) {
+              unlink($pathname.$file);
             }
           }
         }
