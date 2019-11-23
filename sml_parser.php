@@ -82,7 +82,7 @@ class SML_PARSER {
         //Aktuelle Leistung
         $power_string_arr = explode($after_current_power, $arr[1]);
         $current_power_hex = substr($power_string_arr[0], -6);
-        $this->current_power_value = (hexdec($current_power_hex))/1000;
+        $this->current_power_value = (hexdec($current_power_hex))/100;
     }
 
 }
