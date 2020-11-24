@@ -1,6 +1,7 @@
 <?php
 require_once 'sml_parser.php';
 require_once 'send_data.php';
+require_once 'send_data_powmon.php';
 
 /** Parameter Parsen */
 $params = array();
@@ -57,6 +58,12 @@ if(!empty($sml_parser->total_power_consumption_value)) {
   $send_data->total_power_consumption_value = $sml_parser->total_power_consumption_value;
   $send_data->current_power_value = $sml_parser->current_power_value;
   $send_data->postData();
+
+  //New power monitor
+  $send_data_powmon = new SEND_DATA_POWMON();
+  $send_data_powmon->total_power_consumption_value = $sml_parser->total_power_consumption_value;
+  $send_data_powmon->postData();
+
 }
 
 ?>
